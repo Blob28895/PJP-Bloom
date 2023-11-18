@@ -55,7 +55,7 @@ public class CursorManager : MonoBehaviour
 		else if (Vector3.Distance(_lastMousePosition, transform.position) < movementThreshold && currentScale < maxScale)
 		{
 			transform.localScale = new Vector3(currentScale + increaseRate, currentScale + increaseRate, 1f);
-			Debug.Log(Vector3.Distance(_lastMousePosition, transform.position));
+			//Debug.Log(Vector3.Distance(_lastMousePosition, transform.position));
 		}
 		_lastMousePosition = transform.position;
 		/*float speedScale = Math.Max(0.1f, Math.Abs(Input.GetAxis("Mouse X") + Input.GetAxis("Mouse Y")));
