@@ -20,13 +20,13 @@ public class FlowerSpawner : MonoBehaviour
 	{
 
 		float camHeight = Camera.main.orthographicSize * screenCoverage;
-		float camWidth = camHeight * Camera.main.aspect * screenCoverage;
+		float camWidth = camHeight * Camera.main.aspect * (screenCoverage + 0.1f);
 
 		Vector3 spawnPosition = Vector3.one;
 		for(int i = 0; i < amount; ++i)
 		{
-			spawnPosition.x = Random.RandomRange(-1 * camWidth, camWidth);
-			spawnPosition.y = Random.RandomRange(-1 * camHeight, camHeight);
+			spawnPosition.x = Random.Range(-1 * camWidth, camWidth);
+			spawnPosition.y = Random.Range(-1 * camHeight, camHeight);
 
 			Instantiate(flowerBud, spawnPosition, Quaternion.identity);
 		}
