@@ -34,9 +34,5 @@ public class FlowerSpawner : MonoBehaviour
 
 	private void Update()
 	{
-		if (Input.GetKeyDown(KeyCode.P))
-		{
-			spawnFlowers(1);
-		}
 	}
 }

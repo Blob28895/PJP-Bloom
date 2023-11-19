@@ -16,6 +16,10 @@ public class Bullet : MonoBehaviour
 			{
 				Destroy(col.gameObject);
 			}
+			if (col.CompareTag("Enemy"))
+			{
+				col.GetComponent<Squirrel>().Die();
+			}
 		}
 	}
 

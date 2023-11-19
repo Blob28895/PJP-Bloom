@@ -7,6 +7,9 @@ TagManager:
   - Bullet
   - Target
   - Flower
+  - Plant
+  - Enemy
+  - Border
   layers:
   - Default
   - TransparentFX
