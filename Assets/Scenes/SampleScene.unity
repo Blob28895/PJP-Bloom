@@ -2071,7 +2071,7 @@ MonoBehaviour:
   aimingTargets: {fileID: 739034853}
   goalScreen: {fileID: 1610975296}
   goalTargets: {fileID: 1669542642}
-  roundText: {fileID: 0}
+  roundText: {fileID: 1417756704}
   squirrelCount: 5
   flowerCount: 3
   squirrelIncrease: 3

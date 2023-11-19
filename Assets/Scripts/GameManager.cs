@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SubsystemsImplementation;
+using UnityEngine.UI;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -36,6 +38,11 @@ public class GameManager : MonoBehaviour
 	public IEnumerator startRound()
 	{
 		allSquirrelsSpawned = false;
+		//Show Round count
+		roundText.SetActive(true);
+		roundText.GetComponent<TextMeshProUGUI>().text = "Round: " + (round + 1).ToString();
+		yield return new WaitForSeconds(1.5f);
+		roundText.SetActive(false);
 		//Spawn Flowers
 		for(int i = 0; i < flowerCount + round * flowerIncrease; ++i)
 		{
