@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Flower : MonoBehaviour
 {
+	[SerializeField] private Sprite bloomSprite;
 
-	/*private void OnTriggerEnter2D(Collider2D collision)
+
+	public void bloom()
 	{
-		if(collision.CompareTag("Enemy"))
-		{
-			Destroy(gameObject);
-		}
-	}*/
+		GetComponent<SpriteRenderer>().sprite = bloomSprite;
+	}
+	
 }

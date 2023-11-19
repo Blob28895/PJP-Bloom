@@ -18,7 +18,7 @@ public class Bullet : MonoBehaviour
 			}
 			if (col.CompareTag("Enemy"))
 			{
-				col.GetComponent<Squirrel>().Die();
+				col.GetComponent<Squirrel>().Die(true);
 			}
 		}
 	}

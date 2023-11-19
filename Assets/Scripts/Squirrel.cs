@@ -14,11 +14,13 @@ public class Squirrel : MonoBehaviour
     private GameObject target;
     private Vector3 randomTargetPos;
     private SpriteRenderer spriteRenderer;
+    private GameManager gameManager;
     void Start()
     {
         //target = GameObject.FindGameObjectWithTag("Flower");
         //SearchForTarget();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        gameManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
     }
 
     void SearchForTarget()
@@ -45,7 +47,7 @@ public class Squirrel : MonoBehaviour
 			return;
         }
         MoveTowardsTarget();
-
+        checkOutofBounds();
     }
     
     private void moveTowardsRandomPos()
@@ -99,6 +101,7 @@ public class Squirrel : MonoBehaviour
         {
             Destroy(collision.gameObject);
             carryingFlower = true;
+            gameManager.updateSquirrelFlowerCount(1);
             target = null;
             escapeDirection = Random.insideUnitCircle.normalized * 100;
             if(escapeDirection.x > 0)
@@ -114,8 +117,7 @@ public class Squirrel : MonoBehaviour
 
         if (collision.CompareTag("Border"))
         {
-            Debug.Log("Squirrel Escaped with a flower!");
-            Destroy(gameObject);
+            Die(false);
         }
     }
 
@@ -126,13 +128,27 @@ public class Squirrel : MonoBehaviour
 		transform.localScale = newScale;
 	}
 
-    public void Die()
+    public void Die(bool shot)
     {
         if (carryingFlower)
         {
-            carryingFlower = false;
-            Instantiate(flower, transform.position, Quaternion.identity);
+			carryingFlower = false;
+			gameManager.updateSquirrelFlowerCount(-1);
+			if (shot)
+            {
+				Instantiate(flower, transform.position, Quaternion.identity);
+			}
         }
         Destroy(gameObject);
+    }
+
+    //I hate that im implementing this function but its here as an absolute failsafe to kill the squirrels if they somehow get past their barriers with a flower
+    private void checkOutofBounds()
+    {
+        if(transform.position.y > 8f || transform.position.y < -8.5f || transform.position.x < -12f || transform.position.x > 12f)
+        {
+            Die(false);
+            Debug.Log("Squirrel out of bounds");
+        }
     }
 }

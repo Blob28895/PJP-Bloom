@@ -1,18 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SubsystemsImplementation;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameObject[] squirrelSpawners;
 	[SerializeField] private FlowerSpawner flowerSpawner;
 
-	[Header("Menu Controls")]
+	[Header("UI Controls")]
 	[SerializeField] private GameObject titleScreen;
 	[SerializeField] private GameObject aimingScreen;
 	[SerializeField] private GameObject aimingTargets;
 	[SerializeField] private GameObject goalScreen;
 	[SerializeField] private GameObject goalTargets;
+	[SerializeField] private GameObject roundText;
 
 	[Header("First round values")]
 	[SerializeField] private int squirrelCount;
@@ -28,38 +31,32 @@ public class GameManager : MonoBehaviour
 	private int round = 0;
 	private bool targetCheck = false;
 	private bool allSquirrelsSpawned = false;
-	public void startRound()
+	private bool inRound = false;
+	private int flowersHeldBySquirrels = 0;
+	public IEnumerator startRound()
 	{
 		allSquirrelsSpawned = false;
-		flowerSpawner.spawnFlowers(flowerCount + round * flowerIncrease);
-		//spawnSquirrelsatRandomSpawners(squirrelCount + round * squirrelIncrease);
-		StartCoroutine(spawnSquirrelsforRound(squirrelCount + round * squirrelIncrease));
-		round++;
-	}
-
-	/*private void spawnSquirrelsatRandomSpawners(int amount)
-	{
-		for(int i = 0; i < amount; ++i)
+		//Spawn Flowers
+		for(int i = 0; i < flowerCount + round * flowerIncrease; ++i)
 		{
-			squirrelSpawners[Random.Range(0, squirrelSpawners.Length - 1)].GetComponent<SquirrelSpawner>().spawnSquirrel(1);
+			flowerSpawner.spawnFlowers(1);
+			yield return new WaitForSeconds(0.25f);
 		}
-		allSquirrelsSpawned = true;
-	}*/
-
-	private IEnumerator spawnSquirrelsforRound(int amount)
-	{
-		for (int i = 0; i < amount; ++i)
+		yield return new WaitForSeconds(1);
+		//Spawn Squirrels
+		for (int i = 0; i < squirrelCount + round * squirrelIncrease; ++i)
 		{
-			squirrelSpawners[Random.Range(0, squirrelSpawners.Length - 1)].GetComponent<SquirrelSpawner>().spawnSquirrel(1);
+			squirrelSpawners[Random.Range(0, squirrelSpawners.Length)].GetComponent<SquirrelSpawner>().spawnSquirrel(1);
 			yield return new WaitForSeconds(spawnRate);
 		}
 		allSquirrelsSpawned = true;
+
+		round++;
+		inRound = true;
 	}
 
-	private void Start()
-	{
-		//startRound();
-	}
+
+
 	private void Update()
 	{
 		if (targetCheck)
@@ -79,10 +76,46 @@ public class GameManager : MonoBehaviour
 				{
 					goalScreen.SetActive(false);
 					targetCheck = false;
-					startRound();
+					StartCoroutine(startRound());
 				}
 			}
 		}
+		if(inRound)
+		{
+			if(!flowersAlive() || (!SquirrelsAlive() && allSquirrelsSpawned))
+			{
+				StartCoroutine(endRound());
+			}
+		}
+	}
+
+	private IEnumerator endRound()
+	{
+		inRound = false;
+		yield return new WaitForSeconds(1);
+		GameObject[] remainingFlowers = GameObject.FindGameObjectsWithTag("Flower");
+		foreach(GameObject flower in remainingFlowers)
+		{
+			flower.GetComponent<Flower>().bloom();
+			yield return new WaitForSeconds(0.5f);
+		}
+		yield return new WaitForSeconds(1f);
+		foreach(GameObject flower in remainingFlowers)
+		{
+			Destroy(flower);
+		}
+		allSquirrelsSpawned = false;
+		StartCoroutine(startRound());
+	}
+
+	private bool flowersAlive()
+	{
+		GameObject[] flowers = GameObject.FindGameObjectsWithTag("Flower");
+		if (flowers.Length == 0 || flowersHeldBySquirrels > 0)
+		{
+			return true;
+		}
+		return true;
 	}
 
 	private bool SquirrelsAlive()
@@ -103,5 +136,8 @@ public class GameManager : MonoBehaviour
 		targetCheck = true;
 	}
 
-	
+	public void updateSquirrelFlowerCount(int i)
+	{
+		flowerCount += i;
+	}
 }
