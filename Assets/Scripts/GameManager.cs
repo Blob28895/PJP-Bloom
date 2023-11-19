@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
 	[SerializeField] private int flowerIncrease;
 	[SerializeField] private float spawnRate;
 	[SerializeField] private float spawnRateIncrease;
+	[SerializeField] private float movementSpeedIncrease = 0.05f;
 
 
 	private int round = 0;
@@ -38,11 +39,13 @@ public class GameManager : MonoBehaviour
 	public IEnumerator startRound()
 	{
 		allSquirrelsSpawned = false;
+
 		//Show Round count
 		roundText.SetActive(true);
 		roundText.GetComponent<TextMeshProUGUI>().text = "Round: " + (round + 1).ToString();
 		yield return new WaitForSeconds(1.5f);
 		roundText.SetActive(false);
+
 		//Spawn Flowers
 		for(int i = 0; i < flowerCount + round * flowerIncrease; ++i)
 		{
@@ -50,11 +53,13 @@ public class GameManager : MonoBehaviour
 			yield return new WaitForSeconds(0.25f);
 		}
 		yield return new WaitForSeconds(1);
+
+		Debug.Log("multiplier: " + movementSpeedIncrease * round);
 		//Spawn Squirrels
 		for (int i = 0; i < squirrelCount + round * squirrelIncrease; ++i)
 		{
-			squirrelSpawners[Random.Range(0, squirrelSpawners.Length)].GetComponent<SquirrelSpawner>().spawnSquirrel(1);
-			yield return new WaitForSeconds(spawnRate);
+			squirrelSpawners[Random.Range(0, squirrelSpawners.Length)].GetComponent<SquirrelSpawner>().spawnSquirrel(1, movementSpeedIncrease * round);
+			yield return new WaitForSeconds(Mathf.Max(spawnRate - (spawnRateIncrease * round), 0.15f));
 		}
 		allSquirrelsSpawned = true;
 

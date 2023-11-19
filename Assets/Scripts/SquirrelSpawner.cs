@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class SquirrelSpawner : MonoBehaviour
@@ -17,15 +18,16 @@ public class SquirrelSpawner : MonoBehaviour
 	{
     }
 
-	public void spawnSquirrel(int amount)
+	public void spawnSquirrel(int amount, float speedMultiplier)
 	{
 		for(int i = 0; i < amount; i++)
 		{
-			Instantiate(squirrel, new Vector3(Random.Range(-1 * _collider.bounds.extents.x / 2, _collider.bounds.extents.x / 2),
+			GameObject squirrelInstance = Instantiate(squirrel, new Vector3(Random.Range(-1 * _collider.bounds.extents.x / 2, _collider.bounds.extents.x / 2),
 												Random.Range(-1 * _collider.bounds.extents.y / 2, _collider.bounds.extents.y / 2),
 												1) + transform.position,
 												Quaternion.identity,
 												transform);
+			squirrelInstance.GetComponent<Squirrel>().setMovementSpeedMultiplier(speedMultiplier);
 		}
 	}
 }

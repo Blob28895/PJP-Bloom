@@ -72,7 +72,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 7e8cc0e9b2f941e4e8889bc7d5556dfd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -204,6 +204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2ff6b6fdba3bd14294eb406c5e251d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flowerIcon: {fileID: 1162688007238076140}
   flower: {fileID: 8206232896918790805, guid: e1e751480bec1df4e831a82763ff4593, type: 3}
   movementSpeed: 0.05
 --- !u!61 &4621271244198228130

@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 
 public class Squirrel : MonoBehaviour
 {
+    [SerializeField] private GameObject flowerIcon;
     [SerializeField] private GameObject flower;
     [SerializeField] private float movementSpeed = 0.003f;
 
@@ -34,16 +35,17 @@ public class Squirrel : MonoBehaviour
 
     void FixedUpdate()
     {
-		if (carryingFlower) { 
-            Escape(); 
-            return; 
+		checkOutofBounds();
+		if (carryingFlower) {
+            Escape();
+			return; 
         }
 		if (target == null && !carryingFlower) { 
             SearchForTarget(); 
 			return;
         }
         MoveTowardsTarget();
-        checkOutofBounds();
+
     }
     
     private void moveTowardsRandomPos()
@@ -98,6 +100,7 @@ public class Squirrel : MonoBehaviour
             Destroy(collision.gameObject);
             carryingFlower = true;
             gameManager.updateSquirrelFlowerCount(1);
+            flowerIcon.SetActive(true);
             target = null;
             escapeDirection = Random.insideUnitCircle.normalized * 100;
             if(escapeDirection.x > 0)
@@ -146,5 +149,12 @@ public class Squirrel : MonoBehaviour
             Die(false);
             Debug.Log("Squirrel out of bounds");
         }
+    }
+
+    public void setMovementSpeedMultiplier(float multiplier)
+    {
+        //Debug.Log("Old: " + movementSpeed);
+        movementSpeed = movementSpeed * (1 + multiplier);
+        //Debug.Log("New: " + movementSpeed);
     }
 }
