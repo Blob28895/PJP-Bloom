@@ -32,15 +32,26 @@ public class GameManager : MonoBehaviour
 	{
 		allSquirrelsSpawned = false;
 		flowerSpawner.spawnFlowers(flowerCount + round * flowerIncrease);
-		spawnSquirrelsatRandomSpawners(squirrelCount + round * squirrelIncrease);
+		//spawnSquirrelsatRandomSpawners(squirrelCount + round * squirrelIncrease);
+		StartCoroutine(spawnSquirrelsforRound(squirrelCount + round * squirrelIncrease));
 		round++;
 	}
 
-	private void spawnSquirrelsatRandomSpawners(int amount)
+	/*private void spawnSquirrelsatRandomSpawners(int amount)
 	{
-		for(int i = 0; i < squirrelSpawners.Length + 1; ++i)
+		for(int i = 0; i < amount; ++i)
 		{
 			squirrelSpawners[Random.Range(0, squirrelSpawners.Length - 1)].GetComponent<SquirrelSpawner>().spawnSquirrel(1);
+		}
+		allSquirrelsSpawned = true;
+	}*/
+
+	private IEnumerator spawnSquirrelsforRound(int amount)
+	{
+		for (int i = 0; i < amount; ++i)
+		{
+			squirrelSpawners[Random.Range(0, squirrelSpawners.Length - 1)].GetComponent<SquirrelSpawner>().spawnSquirrel(1);
+			yield return new WaitForSeconds(spawnRate);
 		}
 		allSquirrelsSpawned = true;
 	}

@@ -2074,7 +2074,7 @@ MonoBehaviour:
   flowerCount: 2
   squirrelIncrease: 3
   flowerIncrease: 2
-  spawnRate: 0
+  spawnRate: 1
   spawnRateIncrease: 0
 --- !u!4 &1120464897
 Transform:
