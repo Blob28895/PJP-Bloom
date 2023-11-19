@@ -138,6 +138,10 @@ public class Squirrel : MonoBehaviour
 				Instantiate(flower, transform.position, Quaternion.identity);
 			}
         }
+        if(shot)
+        {
+            gameManager.addScore(25);
+        }
         Destroy(gameObject);
     }
 
@@ -153,8 +157,6 @@ public class Squirrel : MonoBehaviour
 
     public void setMovementSpeedMultiplier(float multiplier)
     {
-        //Debug.Log("Old: " + movementSpeed);
         movementSpeed = movementSpeed * (1 + multiplier);
-        //Debug.Log("New: " + movementSpeed);
     }
 }

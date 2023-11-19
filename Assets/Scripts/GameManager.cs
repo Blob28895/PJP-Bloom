@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
 	[SerializeField] private GameObject goalScreen;
 	[SerializeField] private GameObject goalTargets;
 	[SerializeField] private GameObject roundText;
+	[SerializeField] private GameObject scoreText;
 
 	[Header("First round values")]
 	[SerializeField] private int squirrelCount;
@@ -36,6 +37,7 @@ public class GameManager : MonoBehaviour
 	private bool allSquirrelsSpawned = false;
 	private bool inRound = false;
 	private int flowersHeldBySquirrels = 0;
+	private int score = 0;
 	public IEnumerator startRound()
 	{
 		allSquirrelsSpawned = false;
@@ -109,6 +111,7 @@ public class GameManager : MonoBehaviour
 		foreach(GameObject flower in remainingFlowers)
 		{
 			flower.GetComponent<Flower>().bloom();
+			addScore(100);
 			yield return new WaitForSeconds(0.5f);
 		}
 		yield return new WaitForSeconds(1f);
@@ -151,5 +154,10 @@ public class GameManager : MonoBehaviour
 	public void updateSquirrelFlowerCount(int i)
 	{
 		flowerCount += i;
+	}
+	public void addScore(int i)
+	{
+		score += i;
+		scoreText.GetComponent<TextMeshProUGUI>().text = "Score: " + score.ToString(); 
 	}
 }
