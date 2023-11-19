@@ -10,10 +10,12 @@ public class Shooting : MonoBehaviour
     [SerializeField] Sprite invertedSprite;
     [SerializeField] float crosshairSizeCorrection;
     [SerializeField] float screenShakeDuration = 0.075f;
+    [SerializeField] AudioClip[] audioClips;
 
     private Sprite _baseSprite;
     private SpriteRenderer _crosshairSprite;
     private ScreenShake _screenShake;
+    private AudioSource _audioSource;
 
 
     void Start()
@@ -21,6 +23,7 @@ public class Shooting : MonoBehaviour
         _crosshairSprite = GetComponent<SpriteRenderer>();
         _screenShake = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<ScreenShake>();
         _baseSprite = _crosshairSprite.sprite;
+        _audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -30,6 +33,9 @@ public class Shooting : MonoBehaviour
             shoot();
             _screenShake.shakeCamera(screenShakeDuration);
             StartCoroutine(invertCrosshair());
+            _audioSource.clip = audioClips[UnityEngine.Random.Range(0, audioClips.Length)];
+            _audioSource.Play();
+            
         }
         //Debug.Log("X: " + Input.GetAxis("Mouse X") + ", Y: " + Input.GetAxis("Mouse Y"));
 

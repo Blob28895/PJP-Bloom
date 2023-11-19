@@ -13,13 +13,9 @@ public class Squirrel : MonoBehaviour
     private bool carryingFlower = false;
     private GameObject target;
     private Vector3 randomTargetPos;
-    private SpriteRenderer spriteRenderer;
     private GameManager gameManager;
     void Start()
     {
-        //target = GameObject.FindGameObjectWithTag("Flower");
-        //SearchForTarget();
-        spriteRenderer = GetComponent<SpriteRenderer>();
         gameManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
     }
 
