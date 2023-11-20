@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
 	[SerializeField] private GameObject goalTargets;
 	[SerializeField] private GameObject roundText;
 	[SerializeField] private GameObject scoreText;
+	[SerializeField] private GameObject gameOverScreen;
 
 	[Header("First round values")]
 	[SerializeField] private int squirrelCount;
@@ -38,8 +39,10 @@ public class GameManager : MonoBehaviour
 	private bool inRound = false;
 	private int flowersHeldBySquirrels = 0;
 	private int score = 0;
+	private bool gameover = false;
 	public IEnumerator startRound()
 	{
+		gameOverScreen.SetActive(false);
 		allSquirrelsSpawned = false;
 
 		//Show Round count
@@ -56,7 +59,6 @@ public class GameManager : MonoBehaviour
 		}
 		yield return new WaitForSeconds(1);
 
-		Debug.Log("multiplier: " + movementSpeedIncrease * round);
 		//Spawn Squirrels
 		for (int i = 0; i < squirrelCount + round * squirrelIncrease; ++i)
 		{
@@ -96,13 +98,23 @@ public class GameManager : MonoBehaviour
 		}
 		if(inRound)
 		{
-			if(!flowersAlive() || (!SquirrelsAlive() && allSquirrelsSpawned))
+			if((!SquirrelsAlive() && allSquirrelsSpawned))
 			{
 				StartCoroutine(endRound());
+			}
+			
+			if (!flowersAlive())
+			{
+				gameOver();
 			}
 		}
 	}
 
+	private void gameOver()
+	{
+		gameOverScreen.SetActive(true);
+		gameover = true;
+	}
 	private IEnumerator endRound()
 	{
 		inRound = false;
@@ -120,17 +132,21 @@ public class GameManager : MonoBehaviour
 			Destroy(flower);
 		}
 		allSquirrelsSpawned = false;
-		StartCoroutine(startRound());
+		if (!gameover)
+		{
+			StartCoroutine(startRound());
+		}
 	}
 
 	private bool flowersAlive()
 	{
 		GameObject[] flowers = GameObject.FindGameObjectsWithTag("Flower");
-		if (flowers.Length == 0 || flowersHeldBySquirrels > 0)
+		//Debug.Log(flowers.Length + ":" + flowersHeldBySquirrels);
+		if (flowers.Length > 0 || flowersHeldBySquirrels > 0)
 		{
 			return true;
 		}
-		return true;
+		return false;
 	}
 
 	private bool SquirrelsAlive()
@@ -153,11 +169,28 @@ public class GameManager : MonoBehaviour
 
 	public void updateSquirrelFlowerCount(int i)
 	{
-		flowerCount += i;
+		flowersHeldBySquirrels += i;
 	}
 	public void addScore(int i)
 	{
 		score += i;
 		scoreText.GetComponent<TextMeshProUGUI>().text = "Score: " + score.ToString(); 
+	}
+
+	public void restart()
+	{
+		score = 0;
+		scoreText.GetComponent<TextMeshProUGUI>().text = "Score: " + score.ToString();
+		round = 0;
+
+		GameObject[] squirrels = GameObject.FindGameObjectsWithTag("Enemy");
+		foreach(GameObject squirrel in squirrels)
+		{
+			squirrel.GetComponent<Squirrel>().Die(false);
+		}
+		inRound = false;
+		gameover = false;
+		gameOverScreen.SetActive(false);
+		StartCoroutine(startRound());
 	}
 }
